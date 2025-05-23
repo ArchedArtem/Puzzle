@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Игра с кнопками и лампами 2x2</title>
+    <style>
+        .button { width: 50px; height: 50px; margin: 5px; }
+        .lamp { width: 20px; height: 20px; border-radius: 50%; margin: 5px; }
+        .on { background-color: yellow; }
+        .off { background-color: grey; }
+    </style>
+</head>
+<body>
+    <div id="buttons">
+        <button class="button" id="b00">Вверху</button>
+        <button class="button" id="b01">Вверху</button><br>
+        <button class="button" id="b10">Вверху</button>
+        <button class="button" id="b11">Вверху</button>
+    </div>
+    <div id="lamps">
+        <div class="lamp off" id="lamp1"></div>
+        <div class="lamp off" id="lamp2"></div>
+        <div class="lamp off" id="lamp3"></div>
+    </div>
+    <script>
+        const buttons = [
+            document.getElementById('b00'),
+            document.getElementById('b01'),
+            document.getElementById('b10'),
+            document.getElementById('b11')
+        ];
+        const lamps = [
+            document.getElementById('lamp1'),
+            document.getElementById('lamp2'),
+            document.getElementById('lamp3')
+        ];
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                button.textContent = button.textContent === 'Вверху' ? 'Внизу' : 'Вверху';
+                updateLamps();
+            });
+        });
+
+        function updateLamps() {
+            const states = buttons.map(b => b.textContent === 'Внизу');
+
+            // Лампа 1: все кнопки в одном состоянии
+            const allUp = states.every(s => !s);
+            const allDown = states.every(s => s);
+            lamps[0].className = allUp || allDown ? 'lamp on' : 'lamp off';
+
+            // Лампа 2: обе кнопки в верхней строке нажаты
+            const topRowDown = states[0] && states[1];
+            lamps[1].className = topRowDown ? 'lamp on' : 'lamp off';
+
+            // Лампа 3: обе кнопки в левой колонке нажаты
+            const leftColDown = states[0] && states[2];
+            lamps[2].className = leftColDown ? 'lamp on' : 'lamp off';
+        }
+    </script>
+</body>
+</html>
